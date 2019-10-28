@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.vrprototype001.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "F:\\Unity\\Projects\\Vr_Prototype\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "Vr prototype 001 [Testing]"
+        }
+      }
+    }
+  ]
+}
