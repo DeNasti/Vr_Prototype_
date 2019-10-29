@@ -12,6 +12,8 @@ namespace Utils
         private float maxSpeed;
         private float curSpeed;
 
+        private Transform colliderMover;
+
         public CharacterControllerMover(GameObject charController, Transform cameraRig, Transform head, float sensitivity, float maxSpeed)
         {
             this.charControllerObj = charController;
@@ -21,6 +23,7 @@ namespace Utils
             this.maxSpeed = maxSpeed;
 
             charControllerCC = charControllerObj.GetComponent<CharacterController>();
+            colliderMover = charControllerObj.transform.GetChild(1);
         }
 
         public void Move()
@@ -28,6 +31,8 @@ namespace Utils
             HandleHead();
             HandleHeight();
             CalculateMovement();
+
+            colliderMover.position = new Vector3(head.position.x, colliderMover.position.y, head.position.z );
         }
 
         private void HandleHead()

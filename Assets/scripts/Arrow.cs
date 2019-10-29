@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyUtils;
+using Assets.scripts.Utils;
 
 public class Arrow : MonoBehaviour
 {
@@ -33,9 +35,27 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            Instantiate(impactParticle, tip.transform.position, tip.rotation);
+        if (other.tag.Equals(Tags.BowEquipZone) || other.tag.Equals(Tags.SwordEquipZone))
+        {
+            return;
+        }
+
+        ArrowImpact(other);
+
     }
+
+    private void ArrowImpact(Collider other)
+    {
+        var velocityPreImpact = rb.velocity;
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        var particle = Instantiate(impactParticle, tip.transform.position, tip.rotation);
+
+        StartCoroutine(HandleGameObject.KillParticleAfterSeconds(particle, 3f));
+
+        other.gameObject.GetComponent<Rigidbody>()?.AddForceAtPosition(velocityPreImpact, tip.position, ForceMode.Impulse);
+        transform.parent = other.gameObject.transform;
+    }
+
 
 }

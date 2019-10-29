@@ -37,7 +37,11 @@ public class HandInteractionController : MonoBehaviour
     void Start()
     {
         handEquipState = EquippedState.unequipped;
+        swordPrefab.SetActive(false);
+        bowPrefab.SetActive(false);
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -94,7 +98,9 @@ public class HandInteractionController : MonoBehaviour
             if (currentEquipZone == EquipZoneType.sword)
             {
                 handEquipState = EquippedState.sword;
-                currentlyEquipped = Instantiate(swordPrefab, this.transform);
+                currentlyEquipped = swordPrefab;
+                currentlyEquipped.SetActive(true);
+
                 if (thisControllerModel)
                 {
                     thisControllerModel.SetActive(false);
@@ -105,7 +111,10 @@ public class HandInteractionController : MonoBehaviour
             if (currentEquipZone == EquipZoneType.bow)
             {
                 handEquipState = EquippedState.bow;
-                currentlyEquipped = Instantiate(bowPrefab, this.transform);
+                currentlyEquipped = bowPrefab;
+                currentlyEquipped.SetActive(true);
+
+
                 if (thisControllerModel)
                 {
                     thisControllerModel.SetActive(false);
@@ -142,7 +151,10 @@ public class HandInteractionController : MonoBehaviour
         if (handEquipState == EquippedState.unequipped)
         {
             //disequipaggia tutto
-            Destroy(currentlyEquipped);
+            // Destroy(currentlyEquipped);
+            if(currentlyEquipped)
+                currentlyEquipped.SetActive(false);
+
         }
 
         if (thisControllerModel)

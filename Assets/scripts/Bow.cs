@@ -33,6 +33,12 @@ public class Bow : MonoBehaviour
         StartCoroutine(CreateArrow(0.0f));
     }
 
+    private void OnEnable()
+    {
+        if(!currentArrow)
+            StartCoroutine(CreateArrow(0.0f));
+    }
+
     private IEnumerator CreateArrow(float waitTime)
     {
         //wait
