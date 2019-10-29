@@ -2,22 +2,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utils;
 using Valve.VR;
 
 public class SteamInputVR : MonoBehaviour
 {
     public SteamVR_Action_Boolean pullAction;
     public SteamVR_Action_Boolean gripAction;
+    public GameObject charController;
 
     public GameObject handR;
     public GameObject handL;
 
-    HandInteractionController controllerR;
-    HandInteractionController controllerL;
+    private HandInteractionController controllerR;
+    private HandInteractionController controllerL;
 
-    SteamVR_Behaviour_Pose poseR;
-    SteamVR_Behaviour_Pose poseL;
+    private SteamVR_Behaviour_Pose poseR;
+    private SteamVR_Behaviour_Pose poseL;
+    private Transform cameraRig;
+    private Transform head;
 
+    private CharacterControllerMover characterControllerMover;
     private void Start()
     {
         controllerR = handR.GetComponent<HandInteractionController>();
@@ -26,6 +31,10 @@ public class SteamInputVR : MonoBehaviour
         controllerL = handL.GetComponent<HandInteractionController>();
         poseL = handL.GetComponent<SteamVR_Behaviour_Pose>();
 
+        cameraRig = SteamVR_Render.Top().origin;
+        head = SteamVR_Render.Top().head;
+
+        characterControllerMover = new CharacterControllerMover(charController, cameraRig, head, 0.1f, 0.2f);
     }
 
 
@@ -34,6 +43,8 @@ public class SteamInputVR : MonoBehaviour
     {
         TryInput(controllerR, poseR);
         TryInput(controllerL, poseL);
+
+        characterControllerMover.Move();
     }
 
     private void TryInput(HandInteractionController thisController, SteamVR_Behaviour_Pose thisPose)
@@ -66,16 +77,5 @@ public class SteamInputVR : MonoBehaviour
         }
     }
 
-    private void HandleHead()
-    {
-    }
-
-    private void HandleHeight()
-    {
-    }
-
-
-    private void CalculateMovement()
-    {
-    }
+ 
 }

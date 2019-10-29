@@ -26,6 +26,7 @@ public class HandInteractionController : MonoBehaviour
     public GameObject bowPrefab;
     public HandInteractionController oppositeHand;
     public GameObject thisControllerModel;
+    public Material thisHandmaterialIndicator;
 
     private GameObject currentlyEquipped;
 
@@ -40,14 +41,24 @@ public class HandInteractionController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.CompareTag(Tags.BowEquipZone))
         {
             currentEquipZone = EquipZoneType.bow;
+
+            if (thisHandmaterialIndicator)
+                thisHandmaterialIndicator.color = Color.cyan;
+
         }
         else if (other.CompareTag(Tags.SwordEquipZone))
         {
             currentEquipZone = EquipZoneType.sword;
+
+            if (thisHandmaterialIndicator)
+                thisHandmaterialIndicator.color = Color.red;
+
         }
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -55,6 +66,8 @@ public class HandInteractionController : MonoBehaviour
         if (other.CompareTag(Tags.BowEquipZone) || other.CompareTag(Tags.SwordEquipZone))
         {
             currentEquipZone = EquipZoneType.none;
+            if (thisHandmaterialIndicator)
+                thisHandmaterialIndicator.color = Color.white;
         }
     }
 
