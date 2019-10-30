@@ -53,8 +53,15 @@ public class Arrow : MonoBehaviour
 
         StartCoroutine(HandleGameObject.KillParticleAfterSeconds(particle, 3f));
 
-        other.gameObject.GetComponent<Rigidbody>()?.AddForceAtPosition(velocityPreImpact, tip.position, ForceMode.Impulse);
+        var otherRb = other.GetComponent<Rigidbody>();
+        if (otherRb != null)
+        {
+            otherRb.AddForceAtPosition(velocityPreImpact * otherRb.mass, tip.position, ForceMode.Impulse);
+        }
+
         transform.parent = other.gameObject.transform;
+
+        tip.gameObject.GetComponent<Collider>().isTrigger = false;
     }
 
 

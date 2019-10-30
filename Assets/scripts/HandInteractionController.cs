@@ -108,7 +108,7 @@ public class HandInteractionController : MonoBehaviour
             }
 
             //in bow zone equib bow
-            if (currentEquipZone == EquipZoneType.bow)
+            if (true)//currentEquipZone == EquipZoneType.bow)
             {
                 handEquipState = EquippedState.bow;
                 currentlyEquipped = bowPrefab;

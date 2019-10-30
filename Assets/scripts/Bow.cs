@@ -35,7 +35,7 @@ public class Bow : MonoBehaviour
 
     private void OnEnable()
     {
-        if(!currentArrow)
+        if (!currentArrow)
             StartCoroutine(CreateArrow(0.0f));
     }
 
@@ -72,19 +72,14 @@ public class Bow : MonoBehaviour
 
     private float calculatePull(Transform pullHand)
     {
-        try
-        {
-            Vector3 direction = endPoint.position - startPoint.position;
-            float magnitude = direction.magnitude;
-            direction.Normalize();
 
-            Vector3 difference = pullHand.position - startPoint.position;
+        Vector3 direction = endPoint.position - startPoint.position;
+        float magnitude = direction.magnitude;
+        direction.Normalize();
 
-            return Vector3.Dot(difference, direction) / magnitude;
-        }
-        catch (System.Exception E ) { Debug.Log(E.Message); }
+        Vector3 difference = pullHand.position - startPoint.position;
 
-        return 100f;
+        return Vector3.Dot(difference, direction) / magnitude;
     }
 
     private void FireArrow(float pullPercentage)
@@ -122,7 +117,6 @@ public class Bow : MonoBehaviour
 
     public void Release()
     {
-        Debug.LogWarning("Release start");
 
         if (pullValue > 0.25)
         {

@@ -10,6 +10,7 @@ namespace Assets.scripts.Utils
     {
         public const string BowEquipZone = "BowEquipZone";
         public const string SwordEquipZone = "SwordEquipZone";
+        public const string ButtonTrigger = "ButtonTrigger";
 
     }
 }
