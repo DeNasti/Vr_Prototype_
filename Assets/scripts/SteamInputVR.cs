@@ -23,6 +23,7 @@ public class SteamInputVR : MonoBehaviour
     private Transform head;
 
     private CharacterControllerMover characterControllerMover;
+
     private void Start()
     {
         controllerR = handR.GetComponent<HandInteractionController>();
@@ -50,23 +51,26 @@ public class SteamInputVR : MonoBehaviour
     private void TryInput(HandInteractionController thisController, SteamVR_Behaviour_Pose thisPose)
     {
 
-        //premo e mollo il grip
-        if (gripAction.GetStateDown(thisPose.inputSource))
-        {
-            thisController.HandActivated(true);
-            return;
-        }
+        ////premo e mollo il grip
+        //if (gripAction.GetStateDown(thisPose.inputSource))
+        //{
+        //    thisController.HandActivated(true);
+        //    return;
+        //}
 
-        if (gripAction.GetStateUp(thisPose.inputSource))
-        {
-            thisController.HandReleased(true);
-            return;
-        }
+        //if (gripAction.GetStateUp(thisPose.inputSource))
+        //{
+        //    thisController.HandReleased(true);
+        //    return;
+        //}
+
+
 
         //premo e mollo il trigger
         if (pullAction.GetStateDown(thisPose.inputSource))
         {
-            thisController.HandActivated(false);
+            var isGripPressed = gripAction.GetStateDown(thisPose.inputSource);
+            thisController.HandActivated(isGripPressed);
             return;
         }
 

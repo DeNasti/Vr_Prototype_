@@ -32,7 +32,9 @@ public class HandInteractionController : MonoBehaviour
 
     public EquippedState handEquipState;
     public EquipZoneType currentEquipZone;
+
     private bool isPullingBow;
+    private Sword thisSwordController;
 
     void Start()
     {
@@ -43,54 +45,21 @@ public class HandInteractionController : MonoBehaviour
 
 
 
-    private void OnTriggerEnter(Collider other)
+    public void HandActivated(bool gripped)
     {
+        //if (gripped)
+        //{
+        //    handEquipState = EquippedState.shield;
 
-        if (other.CompareTag(Tags.BowEquipZone))
-        {
-            currentEquipZone = EquipZoneType.bow;
-
-            if (thisHandmaterialIndicator)
-                thisHandmaterialIndicator.color = Color.cyan;
-
-        }
-        else if (other.CompareTag(Tags.SwordEquipZone))
-        {
-            currentEquipZone = EquipZoneType.sword;
-
-            if (thisHandmaterialIndicator)
-                thisHandmaterialIndicator.color = Color.red;
-
-        }
-
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag(Tags.BowEquipZone) || other.CompareTag(Tags.SwordEquipZone))
-        {
-            currentEquipZone = EquipZoneType.none;
-            if (thisHandmaterialIndicator)
-                thisHandmaterialIndicator.color = Color.white;
-        }
-    }
-
-
-    public void HandActivated(bool shield)
-    {
-        if (shield)
-        {
-            handEquipState = EquippedState.shield;
-
-            //ritorno perchè lo stato scudo è prioritario
-            return;
-        }
+        //    //ritorno perchè lo stato scudo è prioritario
+        //    return;
+        //}
 
         if (handEquipState == EquippedState.unequipped)
         {
             if (oppositeHand.handEquipState == EquippedState.bow)
             {
-                if (TryPullBow())
+                if (TryPullBow(gripped))
                     return;
             }
 
@@ -101,6 +70,8 @@ public class HandInteractionController : MonoBehaviour
                 currentlyEquipped = swordPrefab;
                 currentlyEquipped.SetActive(true);
 
+                thisSwordController = thisControllerModel.gameObject.GetComponent<Sword>();
+                thisSwordController.ActivatePower();
                 if (thisControllerModel)
                 {
                     thisControllerModel.SetActive(false);
@@ -108,7 +79,7 @@ public class HandInteractionController : MonoBehaviour
             }
 
             //in bow zone equib bow
-            if (true)//currentEquipZone == EquipZoneType.bow)
+            if (currentEquipZone == EquipZoneType.bow)
             {
                 handEquipState = EquippedState.bow;
                 currentlyEquipped = bowPrefab;
@@ -124,7 +95,7 @@ public class HandInteractionController : MonoBehaviour
         }
     }
 
-    private bool TryPullBow()
+    private bool TryPullBow(bool extraPower)
     {
         var isPulled = oppositeHand.currentlyEquipped.GetComponent<Bow>().Pull(this.gameObject.transform);
 
@@ -140,19 +111,19 @@ public class HandInteractionController : MonoBehaviour
 
     }
 
-    public void HandReleased(bool shield)
+    public void HandReleased(bool grip)
     {
         if (isPullingBow)
         {
             ReleaseBow();
         }
-        else TryUnequip(shield);
+        else TryUnequip(grip);
 
         if (handEquipState == EquippedState.unequipped)
         {
             //disequipaggia tutto
             // Destroy(currentlyEquipped);
-            if(currentlyEquipped)
+            if (currentlyEquipped)
                 currentlyEquipped.SetActive(false);
 
         }
@@ -161,20 +132,21 @@ public class HandInteractionController : MonoBehaviour
         {
             thisControllerModel.SetActive(true);
         }
+
+
     }
 
-    private void TryUnequip(bool shield)
+    private void TryUnequip(bool grip)
     {
-        //passo allo stato "unequipped" solo in due casi: 
-        //1) mollo lo scudo quando lo ho in mano
-        //2) mollo la spada/arco quando li ho in mano
-        if (handEquipState == EquippedState.shield && shield)
+
+        if (grip)
         {
             handEquipState = EquippedState.unequipped;
         }
-        else if (handEquipState != EquippedState.shield && !shield)
+
+        else
         {
-            handEquipState = EquippedState.unequipped;
+            thisSwordController.DeactivatePower();
         }
     }
 

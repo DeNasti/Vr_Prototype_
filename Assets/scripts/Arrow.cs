@@ -47,21 +47,22 @@ public class Arrow : MonoBehaviour
     private void ArrowImpact(Collider other)
     {
         var velocityPreImpact = rb.velocity;
+        rb.velocity = Vector3.zero;
         rb.isKinematic = true;
         rb.useGravity = false;
-        var particle = Instantiate(impactParticle, tip.transform.position, tip.rotation);
 
+        var particle = Instantiate(impactParticle, tip.transform.position, tip.rotation);
         StartCoroutine(HandleGameObject.KillParticleAfterSeconds(particle, 3f));
 
         var otherRb = other.GetComponent<Rigidbody>();
         if (otherRb != null)
         {
-            otherRb.AddForceAtPosition(velocityPreImpact * otherRb.mass, tip.position, ForceMode.Impulse);
+            otherRb.AddForceAtPosition(velocityPreImpact , tip.position, ForceMode.Impulse);
         }
 
         transform.parent = other.gameObject.transform;
 
-        tip.gameObject.GetComponent<Collider>().isTrigger = false;
+        tip.gameObject.GetComponent<Collider>().enabled = false;
     }
 
 
